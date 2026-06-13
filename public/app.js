@@ -1,7 +1,6 @@
 const API_URL = "/cotizaciones";
 
 async function obtenerCotizaciones() {
-
     const res = await fetch(API_URL);
     const datos = await res.json();
 
@@ -9,127 +8,95 @@ async function obtenerCotizaciones() {
     tabla.innerHTML = "";
 
     datos.forEach(c => {
-
         tabla.innerHTML += `
         <tr>
+            <td>${c.cliente}</td>
+            <td>${c.evento}</td>
+            <td>${c.fecha}</td>
+            <td>${c.paquete}</td>
+            <td>${c.telefono}</td>
+            <td>${c.estado}</td>
+            <td>
+                <button class="btn-editar" onclick="editarCotizacion('${c._id}')">
+                    Editar
+                </button>
 
-        <td>${c.cliente}</td>
-        <td>${c.evento}</td>
-        <td>${c.fecha}</td>
-        <td>${c.paquete}</td>
-        <td>${c.telefono}</td>
-        <td>${c.estado}</td>
-
-        <td>
-
-        <button class="btn-editar"
-        onclick="editarCotizacion(
-        '${c._id}',
-        '${c.cliente}',
-        '${c.evento}',
-        '${c.fecha}',
-        '${c.paquete}',
-        '${c.ubicacion}',
-        '${c.telefono}',
-        '${c.estado}'
-        )">
-        Editar
-        </button>
-
-        <button class="btn-eliminar"
-        onclick="eliminarCotizacion('${c._id}')">
-        Eliminar
-        </button>
-
-        </td>
-
+                <button class="btn-eliminar" onclick="eliminarCotizacion('${c._id}')">
+                    Eliminar
+                </button>
+            </td>
         </tr>
         `;
     });
 }
 
-document.getElementById("formCotizacion").addEventListener("submit", async (e)=>{
-
+document.getElementById("formCotizacion").addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const id = document.getElementById("cotizacionId").value;
 
     const cotizacion = {
-
-        cliente: cliente.value,
-        evento: evento.value,
-        fecha: fecha.value,
-        paquete: paquete.value,
-        ubicacion: ubicacion.value,
-        telefono: telefono.value,
-        estado: estado.value
-
+        cliente: document.getElementById("cliente").value,
+        evento: document.getElementById("evento").value,
+        fecha: document.getElementById("fecha").value,
+        paquete: document.getElementById("paquete").value,
+        ubicacion: document.getElementById("ubicacion").value,
+        telefono: document.getElementById("telefono").value,
+        estado: document.getElementById("estado").value
     };
 
-    if(id){
-
-        await fetch(`${API_URL}/${id}`,{
-
-            method:"PUT",
-            headers:{
-                "Content-Type":"application/json"
+    if (id) {
+        await fetch(`${API_URL}/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
             },
-            body:JSON.stringify(cotizacion)
-
+            body: JSON.stringify(cotizacion)
         });
-
-    }else{
-
-        await fetch(API_URL,{
-
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
+    } else {
+        await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
             },
-            body:JSON.stringify(cotizacion)
-
+            body: JSON.stringify(cotizacion)
         });
-
     }
 
-    formulario.reset();
-
-    cotizacionId.value="";
-
-    tituloFormulario.textContent="Registrar Cotización";
-    btnGuardar.textContent="Guardar Cotización";
+    document.getElementById("formCotizacion").reset();
+    document.getElementById("cotizacionId").value = "";
+    document.getElementById("tituloFormulario").textContent = "Registrar Cotización";
+    document.getElementById("btnGuardar").textContent = "Guardar Cotización";
 
     obtenerCotizaciones();
-
 });
 
-function editarCotizacion(id,cliente,evento,fecha,paquete,ubicacion,telefono,estado){
+async function editarCotizacion(id) {
+    const res = await fetch(API_URL);
+    const datos = await res.json();
 
-    cotizacionId.value=id;
+    const c = datos.find(item => item._id === id);
 
-    document.getElementById("cliente").value=cliente;
-    document.getElementById("evento").value=evento;
-    document.getElementById("fecha").value=fecha;
-    document.getElementById("paquete").value=paquete;
-    document.getElementById("ubicacion").value=ubicacion;
-    document.getElementById("telefono").value=telefono;
-    document.getElementById("estado").value=estado;
+    document.getElementById("cotizacionId").value = c._id;
+    document.getElementById("cliente").value = c.cliente;
+    document.getElementById("evento").value = c.evento;
+    document.getElementById("fecha").value = c.fecha;
+    document.getElementById("paquete").value = c.paquete;
+    document.getElementById("ubicacion").value = c.ubicacion;
+    document.getElementById("telefono").value = c.telefono;
+    document.getElementById("estado").value = c.estado;
 
-    tituloFormulario.textContent="Editar Cotización";
-    btnGuardar.textContent="Actualizar Cotización";
-
+    document.getElementById("tituloFormulario").textContent = "Editar Cotización";
+    document.getElementById("btnGuardar").textContent = "Actualizar Cotización";
 }
 
-async function eliminarCotizacion(id){
-
-    if(confirm("¿Deseas eliminar esta cotización?")){
-
-        await fetch(`${API_URL}/${id}`,{
-            method:"DELETE"
+async function eliminarCotizacion(id) {
+    if (confirm("¿Deseas eliminar esta cotización?")) {
+        await fetch(`${API_URL}/${id}`, {
+            method: "DELETE"
         });
 
         obtenerCotizaciones();
-
     }
 }
 
