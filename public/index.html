@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renta de Fotografía</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h1>Sistema de Renta de Fotografía</h1>
+
+<h2 id="tituloFormulario">Registrar Cotización</h2>
+
+<form id="formCotizacion">
+
+<input type="hidden" id="cotizacionId">
+
+<input id="cliente" placeholder="Cliente" required>
+
+<input id="evento" placeholder="Tipo de Evento" required>
+
+<input id="fecha" type="date" required>
+
+<input id="paquete" placeholder="Paquete Contratado" required>
+
+<input id="ubicacion" placeholder="Ubicación" required>
+
+<input id="telefono" placeholder="Teléfono" required>
+
+<select id="estado">
+
+<option>Pendiente</option>
+<option>Confirmado</option>
+<option>Cancelado</option>
+
+</select>
+
+<button id="btnGuardar" type="submit">
+Guardar Cotización
+</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h2>Cotizaciones Registradas</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Cliente</th>
+<th>Evento</th>
+<th>Fecha</th>
+<th>Paquete</th>
+<th>Teléfono</th>
+<th>Estado</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaCotizaciones"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
